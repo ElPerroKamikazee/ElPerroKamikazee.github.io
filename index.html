@@ -1,0 +1,1635 @@
+<!DOCTYPE html>
+<!-- ElPerroKamikazee site, images (logo.png, typing.png, icon.png) -->
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ElPerroKamikazee</title>
+  <link rel="icon" type="image/png" href="icon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;900&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=IM+Fell+English:ital@0;1&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --bg: #07060d;
+      --surface: #0e0b18;
+      --surface2: #161228;
+      --purple: #6e3fa0;
+      --purple-light: #9d6cc9;
+      --lavender: #c4a8e0;
+      --text: #f0e8fa;
+      --text-dim: #c8b8dc;
+      --text-muted: #9a8cb8;
+      --nav-bg: rgba(7,6,13,.92);
+      --nav-border: rgba(110, 63, 160, .18);
+      --border-soft: rgba(110,63,160,.15);
+      --border-faint: rgba(196, 168, 224, 0.18);
+      --surface-poem: rgba(14,11,24,.6);
+      --nav-h: 64px;
+      --game-bg: #051423;
+      --game-surface: #071d33;
+      --game-cyan: #0d9bf7;
+      --game-cyan-soft: rgba(13,155,247,.25);
+      --game-cyan-faint: rgba(13, 155, 247, .15);
+      --game-text: #e2e8f0;
+      --game-text-dim: rgba(226,232,240,.7);
+      --game-text-muted: rgba(226, 232, 240, 0.4);
+      --game-border: rgba(13,155,247,.2);
+      --game-glow: rgba(13,155,247,.35);
+      --game-btn-text: #051423;
+      --mono: 'JetBrains Mono', 'Courier New', monospace;
+    }
+
+    [data-theme="light"] {
+      --bg: #e8e6ee;
+      --surface: #dddbe6;
+      --surface2: #d2cfe0;
+      --purple-light: #7040a8;
+      --lavender: #3b1660;
+      --text: #0a0614;
+      --text-dim: #1e1030;
+      --text-muted: #4a3a68;
+      --nav-bg: rgba(228,225,238,.96);
+      --nav-border: rgba(110, 63, 160, .22);
+      --border-soft: rgba(110,63,160,.2);
+      --border-faint: rgba(59, 22, 96, 0.16);
+      --surface-poem: rgba(210,207,224,.85);
+
+      --game-bg: #fff;
+      --game-surface: #eef2f4;
+      --game-cyan: #7fb8d4;
+      --game-cyan-soft: rgba(127,184,212,.25);
+      --game-cyan-faint: rgba(127, 184, 212, 0.1);
+      --game-text: #2a2e35;
+      --game-text-dim: rgba(42,46,53,.65);
+      --game-text-muted: rgba(127,184,212,.75);
+      --game-border: rgba(127, 184, 212, .3);
+      --game-glow: rgba(127,184,212,.25);
+      --game-btn-text: #fff;
+    }
+    /* fade when switching light/dark. if something snaps instead of fading it's probably missing from this list */
+    body, nav, .tag, .aura-display, .poem-full, .poem-card,
+    .poem-title, .poem-excerpt, .poem-num, .section-title, .label, .divider,
+    .poetry-intro, .game-desc, .me-line, .nav-links a, .nav-label, .theme-toggle,
+    .btn-primary, .btn-secondary, .hero-tagline, .hero-name {
+      transition: background-color .35s ease, border-color .35s ease, color .35s ease;
+    }
+
+    html { scroll-behavior: smooth }
+
+    body {
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      color: var(--text);
+      font-size: 19px;
+      line-height: 1.7;
+      background: var(--bg);
+      overflow: hidden;
+      cursor: none;
+    }
+
+    /* grain, 0.04 opacity on purpose */
+    body::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+      background-size: 200px 200px;
+      opacity: .04;
+      pointer-events: none;
+      z-index: 9997;
+    }
+
+    .cursor {
+      position: fixed;
+      width: 6px; height: 6px;
+      background: var(--lavender);
+      border-radius: 50%;
+      mix-blend-mode: screen;
+      transform: translate(-50%, -50%);
+      pointer-events: none;
+      z-index: 9999;
+    }
+    .cursor-ring {
+      position: fixed;
+      width: 40px;
+      height: 40px;
+      border: 1px solid rgba(110,63,160,.6);
+      border-radius: 50%;
+      z-index: 9998;
+      pointer-events: none;
+      transform: translate(-50%, -50%);
+      transition: width .3s ease, height .3s ease, border-color .3s ease;
+    }
+
+    .cursor-ring.hovering { width: 50px; height: 50px; border-color: rgba(196,168,224,.5) }
+
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      height: var(--nav-h);
+      z-index: 500;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 2.5rem;
+      background: var(--nav-bg);
+      border-bottom: 1px solid var(--nav-border);
+      backdrop-filter: blur(20px);
+    }
+
+    .nav-logo { display: flex; align-items: center; gap: .75rem; text-decoration: none; flex-shrink: 0 }
+
+    .nav-logo-img {
+      width: 38px; height: 38px;
+      border: 1px solid rgba(196, 168, 224, 0.25);
+      border-radius: 50%;
+      object-fit: cover;
+      object-position: center 15%;
+      filter: drop-shadow(0 0 10px rgba(110,63,160,.4));
+    }
+
+    .nav-logo-text {
+      font-family: 'Cinzel', serif;
+      color: var(--text);
+      font-size: 1rem;
+      text-transform: uppercase;
+      letter-spacing: .3em;
+    }
+
+    .nav-links { display: flex; align-items: center; list-style: none }
+
+    .nav-links a {
+      position: relative;
+      display: flex; align-items: center; justify-content: center;
+      height: var(--nav-h);
+      padding: 0 1.4rem;
+      color: var(--text-muted);
+      text-decoration: none;
+    }
+    .nav-links a:hover,
+    .nav-links a.active { color: var(--lavender); }
+
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      left: 50%; bottom: 0;
+      width: 60%;
+      height: 1px;
+      background: var(--lavender);
+      transform: translateX(-50%) scaleX(0);
+      transition: transform 0.3s ease;
+    }
+
+    .nav-links a:hover::after,
+    .nav-links a.active::after { transform: translateX(-50%) scaleX(1) }
+    .nav-label { font-family: 'Cinzel', serif; font-size: .9rem; letter-spacing: .18em; text-transform: uppercase; }
+    .nav-right {
+      display: flex;
+      align-items: center;
+      flex-shrink: 0;
+      gap: 1.2rem;
+    }
+
+    .theme-toggle {
+      position: relative;
+      display: flex; align-items: center; justify-content: space-between;
+      flex-shrink: 0;
+      width: 56px; height: 28px;
+      padding: 0 6px;
+      border: 1px solid var(--purple);
+      border-radius: 14px;
+      background: var(--surface2);
+      color: var(--text-dim);
+      font-size: .75rem;
+      cursor: none;
+      box-shadow: 0 0 8px rgba(110,63,160,.25);
+      transition: border-color .3s, background .3s, box-shadow .3s;
+    }
+    .theme-toggle:hover { border-color: var(--lavender); box-shadow: 0 0 14px rgba(196, 168, 224, 0.35); }
+
+    .theme-toggle::after {
+      content: '';
+      position: absolute;
+      top: 3px; left: 3px;
+      width: 20px; height: 20px;
+      border-radius: 50%;
+      background: var(--purple-light);
+      box-shadow: 0 0 6px rgba(110,63,160,.5);
+      transition: transform .35s cubic-bezier(.4, 0, .2, 1), background .3s;
+    }
+
+    [data-theme="light"] .theme-toggle::after { transform: translateX(28px); background: var(--lavender); }
+
+    .theme-toggle .icon-dark,
+    .theme-toggle .icon-light {
+      position: relative;
+      z-index: 1;
+      line-height: 1;
+      opacity: .4;
+      transition: opacity .3s;
+    }
+
+    [data-theme="light"] .theme-toggle .icon-dark { opacity: .2 }
+    [data-theme="light"] .theme-toggle .icon-light { opacity: 1 }
+
+    .book-track {
+      position: fixed;
+      top: var(--nav-h);
+      left: 0;
+      width: 100vw;
+      height: calc(100vh - var(--nav-h));
+      overflow: hidden;
+    }
+
+    .book-scroll {
+      display: flex;
+      width: fit-content;
+      height: 100%;
+      will-change: transform;
+      transition: transform .75s cubic-bezier(.77,0,.175,1);
+    }
+
+    .page {
+      position: relative;
+      flex-shrink: 0;
+      width: 100vw;
+      height: 100%;
+      overflow: hidden auto;
+    }
+
+    .page::-webkit-scrollbar { width: 2px }
+    .page::-webkit-scrollbar-track { background: transparent; }
+    .page::-webkit-scrollbar-thumb {
+      border-radius: 2px;
+      background: linear-gradient(to bottom, transparent, var(--purple) 30%, var(--purple-light) 70%, transparent);
+    }
+
+    .arrow-nav {
+      position: fixed;
+      top: 50%;
+      z-index: 400;
+      display: flex; align-items: center; justify-content: center;
+      width: 44px; height: 44px;
+      border: 1px solid var(--nav-border);
+      background: var(--nav-bg);
+      color: var(--text-muted);
+      font-family: 'IM Fell English', serif;
+      font-size: 1.1rem;
+      backdrop-filter: blur(12px);
+      cursor: none;
+      opacity: 0;
+      pointer-events: none;
+      transform: translateY(-50%);
+      transition: border-color 0.3s, color 0.3s, opacity 0.3s, transform 0.3s;
+    }
+
+    .arrow-nav:hover { border-color: var(--lavender); color: var(--lavender); transform: translateY(-50%) scale(1.05) }
+
+    .arrow-nav.visible { opacity: 1; pointer-events: all; }
+    .arrow-prev { left: 2.8rem }
+    .arrow-next { right: 2.8rem }
+    .key-hint {
+      position: fixed;
+      bottom: 4rem;
+      left: 50%;
+      z-index: 300;
+      transform: translateX(-50%);
+      font-family: 'IM Fell English', serif;
+      font-style: italic;
+      font-size: 1rem;
+      letter-spacing: .2em;
+      color: var(--text-muted);
+      white-space: nowrap;
+      opacity: 0;
+      pointer-events: none;
+      animation: fadeIn 1s ease forwards 2.5s;
+      transition: opacity .5s ease;
+    }
+
+    .key-hint.hidden { opacity: 0 !important }
+
+    @keyframes fadeIn { from { opacity: 0 } to { opacity: 1 } }
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(30px) } to { opacity: 1; transform: translateY(0) } }
+    @keyframes pulse { 0%, 100% { opacity: .4; transform: scale(1) } 50% { opacity: 1; transform: scale(1.6) } }
+
+    /* hero */
+    #hero {
+      position: relative;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      min-height: 100%;
+      background: var(--bg);
+      text-align: center;
+      overflow: hidden;
+    }
+
+    #hero canvas { position: absolute; inset: 0; z-index: 0; pointer-events: none }
+
+    .hero-content {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      max-width: 680px;
+      padding: 3rem 2rem 0;
+    }
+
+    .hero-name {
+      margin-bottom: 2rem;
+      font-family: 'Cinzel', serif;
+      font-weight: 600;
+      font-size: clamp(2.8rem, 6vw, 6.5rem);
+      line-height: .88;
+      letter-spacing: -.02em;
+      color: var(--text);
+      opacity: 0;
+      animation: fadeUp 1s ease forwards .7s;
+    }
+
+    .hero-name span {
+      display: block;
+      margin-top: 1.1rem;
+      font-family: 'Cinzel', serif;
+      font-size: .18em;
+      letter-spacing: .28em;
+      color: var(--lavender);
+      text-transform: uppercase;
+    }
+
+    /* .hero-name { text-shadow: 0 0 30px rgba(110,63,160,.3) } */
+
+    .hero-tagline {
+      margin-bottom: 2.5rem;
+      padding: 0 1.5rem;
+      border-inline: 1px solid var(--border-faint);
+      font-family: 'IM Fell English', serif;
+      font-size: 1.1rem;
+      font-style: italic;
+      line-height: 1.9;
+      color: var(--text-dim);
+      opacity: 0;
+      animation: fadeUp 1s ease forwards 1s;
+    }
+
+    .hero-cta {
+      display: flex; flex-wrap: wrap; align-items: center; justify-content: center;
+      gap: 1.5rem;
+      margin-bottom: 1.2rem;
+      opacity: 0;
+      animation: fadeUp 1s ease forwards 1.3s;
+    }
+
+    .btn-primary {
+      padding: .9rem 2.4rem;
+      background: var(--lavender);
+      color: var(--bg);
+      font-family: 'Cinzel', serif; font-size: .72rem; letter-spacing: .2em;
+      text-decoration: none;
+      text-transform: uppercase;
+      transition: background .3s, color .3s, transform .2s;
+    }
+    .btn-primary:hover { background: var(--text); transform: translateY(-1px); }
+    .btn-secondary {
+      font-family: 'Cinzel', serif;
+      color: var(--text-dim);
+      padding-bottom: 2px;
+      border-bottom: 1px solid rgba(196,168,224,.3);
+      font-size: .88rem;
+      letter-spacing: .16em;
+      text-decoration: none;
+      text-transform: uppercase;
+      transition: color .3s, border-color .3s;
+    }
+
+    .btn-secondary:hover { color: var(--lavender); border-color: var(--lavender) }
+
+    .hero-divider { width: 1px; height: 40px; margin: 0 auto 2rem; background: var(--border-faint) }
+
+    .hero-support-note {
+      font-family: 'IM Fell English', serif;
+      font-size: 1rem;
+      font-style: italic;
+      letter-spacing: .1em;
+      color: var(--text-muted);
+      opacity: 0;
+      animation: fadeUp 1s ease forwards 1.5s;
+    }
+
+    .hero-copyright {
+      position: absolute;
+      bottom: 1.8rem; left: 0; right: 0;
+      z-index: 2;
+      font-family: 'IM Fell English', serif;
+      font-size: .72rem;
+      font-style: italic;
+      letter-spacing: .18em;
+      color: var(--text-muted);
+      text-align: center;
+      white-space: nowrap;
+      opacity: 0;
+      animation: fadeUp 1s ease forwards 1.7s;
+    }
+
+    .section-page { position: relative; min-height: 100%; padding: 5rem 6rem }
+    .section-page .watermark {
+      position: absolute;
+      top: 5rem; right: 3rem;
+      font-family: 'Cinzel', serif;
+      font-size: .75rem;
+      letter-spacing: .38em;
+      color: var(--text-muted);
+      opacity: .25;
+      writing-mode: vertical-rl;
+      user-select: none;
+    }
+
+    .inner { max-width: 900px; margin: 0 auto; }
+
+    .label {
+      display: block;
+      margin-bottom: .8rem;
+      font-family: 'Cinzel', serif;
+      font-size: .8rem;
+      letter-spacing: .42em;
+      color: var(--text-muted);
+      text-transform: uppercase;
+    }
+
+    .section-title {
+      font-family: 'Cinzel', serif;
+      font-weight: 600;
+      color: var(--text);
+      font-size: clamp(2rem, 3.5vw, 3.6rem);
+      line-height: 1.06;
+    }
+	
+    .divider {
+      width: 60px; height: 2px;
+      margin: 2rem 0 3rem;
+      background: linear-gradient(to right, var(--purple), transparent);
+      transform: rotate(-1deg);
+      clip-path: polygon(0 20%, 30% 0, 55% 70%, 80% 10%, 100% 60%, 100% 100%, 0 100%);
+    }
+
+    .reveal { opacity: 0; transform: translateY(20px); transition: opacity .9s ease, transform .9s ease }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+    .page-top-line {
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 1px;
+      background: linear-gradient(to right, transparent, rgba(110,63,160,.3), transparent);
+    }
+
+    /* me */
+    #me { position: relative; background: var(--surface); overflow: hidden; }
+
+    .me-layout {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      grid-template-columns: 280px 1fr;
+      gap: 6rem;
+      align-items: center;
+    }
+
+    .me-logo-col { display: flex; flex-direction: column; align-items: center; gap: 1.5rem }
+
+    .me-logo-img {
+      width: 200px; height: 200px;
+      border: 1px solid var(--border-faint);
+      border-radius: 50%;
+      object-fit: cover;
+      object-position: center 15%;
+      opacity: .88;
+      filter: drop-shadow(0 0 30px rgba(110, 63, 160, 0.25));
+    }
+
+    .me-text-col { display: flex; flex-direction: column; gap: 1.4rem; }
+    .me-line {
+      font-weight: 300;
+      color: var(--text-dim);
+      font-size: 1.15rem;
+      line-height: 1.8;
+    }
+
+    .me-line:last-child { color: var(--lavender) }
+
+    #fadowitch { background: var(--surface) }
+
+    #poetry { background: var(--bg); }
+    .poetry-intro {
+      max-width: 560px;
+      margin-bottom: 3.5rem;
+      font-weight: 300;
+      font-size: 1.15rem;
+      line-height: 1.95;
+      color: var(--text-dim);
+    }
+    .poems-list { display: flex; flex-direction: column; border-top: 1px solid var(--border-soft); }
+
+    .poem-card {
+      position: relative;
+      border-bottom: 1px solid var(--border-soft);
+      cursor: pointer;
+      transition: background .3s;
+    }
+
+    .poem-card-inner {
+      display: grid;
+      grid-template-columns: 3rem 1fr auto;
+      gap: 1.5rem;
+      align-items: start;
+      padding: 1.8rem 1.2rem;
+    }
+
+    .poem-num {
+      padding-top: .4rem;
+      font-family: 'Cinzel', serif;
+      font-size: .76rem;
+      letter-spacing: .22em;
+      color: var(--text-muted);
+    }
+    .poem-title {
+      margin-bottom: .5rem;
+      font-family: 'Cinzel', serif;
+      color: var(--text);
+      font-size: 1.08rem;
+      font-weight: 600;
+      letter-spacing: .06em;
+      transition: color .3s;
+    }
+
+    .poem-card:hover .poem-title { color: var(--lavender) }
+
+    .poem-excerpt {
+      font-family: 'IM Fell English', serif;
+      font-size: 1.02rem;
+      font-style: italic;
+      line-height: 1.7;
+      color: var(--text-dim);
+    }
+
+    .poem-toggle-icon {
+      flex-shrink: 0;
+      padding-top: .3rem;
+      font-family: 'IM Fell English', serif;
+      font-size: .95rem;
+      font-style: italic;
+      color: var(--text-muted);
+      white-space: nowrap;
+      user-select: none;
+      transition: color .3s;
+    }
+
+    .poem-card:hover .poem-toggle-icon { color: var(--lavender) }
+
+    .poem-full {
+      display: none;
+      padding: 2rem 2rem 2.5rem 5rem;
+      border-left: 2px solid var(--border-faint);
+      background: var(--surface);
+      font-weight: 300;
+      font-size: 1.2rem;
+      line-height: 2.2;
+      color: var(--text-dim);
+      white-space: pre-line;
+    }
+
+    .poem-card.open { background: var(--surface-poem) }
+
+
+    .poem-card.open .poem-full { display: block }
+
+    .poem-card.open::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0;
+      width: 2px; height: 100%;
+      background: var(--lavender);
+    }
+
+    /* typing... page, purple fading into the game's cyan */
+    #game {
+      background: linear-gradient(to bottom, var(--bg) 0%, #090818 30%, #080f1e 55%, #061525 75%, var(--game-bg) 100%);
+    }
+
+    [data-theme="light"] #game {
+      background: linear-gradient(to bottom, var(--bg) 0%, #dce9f0 30%, #e0edf3 55%, #e8f1f5 75%, #eef2f4 100%);
+    }
+
+    .game-header { display: grid; grid-template-columns: 1.2fr 1fr; gap: 4rem; align-items: flex-start; }
+
+    .game-header-left { min-width: 0 }
+
+    .game-logo { display: flex; align-items: center; justify-content: center; padding-top: .4rem; }
+    .game-logo-img {
+      display: block;
+      width: 140px; height: 140px;
+      margin: 0 auto;
+      object-fit: contain;
+      opacity: .88;
+      filter: drop-shadow(0 0 20px var(--game-glow));
+    }
+
+    .game-tags { display: flex; flex-wrap: wrap; gap: .5rem; margin: 2rem 0 }
+    .tag {
+      padding: .3rem .8rem;
+      border: 1px solid var(--border-faint);
+      font-family: 'Cinzel', serif;
+      color: var(--text-dim);
+      font-size: .62rem;
+      letter-spacing: .15em;
+      text-transform: uppercase;
+      transition: all .2s;
+    }
+    .tag:hover { border-color: rgba(196,168,224,.4); color: var(--lavender); }
+
+    .game-desc {
+      margin-bottom: 1.4rem;
+      font-weight: 300;
+      font-size: 1.22rem;
+      line-height: 1.85;
+      color: var(--text-dim);
+    }
+
+    .game-highlight {
+      font-family: 'IM Fell English', serif;
+      font-style: italic;
+      color: var(--game-cyan);
+    }
+
+    .aura-display {
+      position: relative;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      column-gap: 2rem;
+      align-items: center;
+      overflow: hidden;
+      margin: 2.5rem 0;
+      padding: 1.8rem 2rem;
+      border: 1px solid var(--game-border);
+      background: var(--game-bg);
+    }
+
+    .aura-display::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 1px;
+      background: linear-gradient(to right, var(--game-cyan), var(--game-cyan-soft), transparent);
+    }
+
+    .aura-label {
+      grid-area: 1 / 1;
+      align-self: end;
+      margin-bottom: .5rem;
+      font-family: var(--mono);
+      font-size: .52rem;
+      letter-spacing: .18em;
+      color: var(--game-text-muted);
+      text-transform: uppercase;
+    }
+    .aura-number {
+      grid-area: 1 / 2 / 3;
+      font-family: var(--mono);
+      font-size: 4.5rem;
+      font-weight: 500;
+      line-height: 1;
+      color: var(--game-cyan);
+      text-shadow: 0 0 40px var(--game-glow);
+    }
+    .aura-sub {
+      grid-area: 2 / 1;
+      align-self: start;
+      font-family: var(--mono);
+      font-size: .62rem;
+      letter-spacing: .08em;
+      color: var(--game-text-muted);
+    }
+
+    .aura-live {
+      position: absolute;
+      top: 1.5rem; right: 1.5rem;
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--game-cyan);
+      box-shadow: 0 0 8px var(--game-cyan);
+      animation: pulse 2s ease-in-out infinite;
+    }
+    .game-bottom { margin-top: 3.5rem }
+
+    .bottom-label {
+      display: block;
+      margin-bottom: 1rem;
+      font-family: var(--mono);
+      font-size: .52rem;
+      letter-spacing: .22em;
+      color: var(--game-text-muted);
+      text-transform: uppercase;
+    }
+
+    .cast-grid {
+      display: grid;
+      margin-bottom: 2.5rem;
+      grid-template-columns: repeat(4, 1fr);
+      gap: .5rem;
+    }
+
+    .cast-card {
+      position: relative;
+      overflow: hidden;
+      padding: 1rem .9rem;
+      border: 1px solid var(--game-border);
+      background: var(--game-bg);
+      cursor: default;
+      transition: border-color .3s, background .3s;
+    }
+
+    .cast-card:hover { border-color: var(--game-cyan); background: var(--game-surface); }
+    .cast-card:hover .cast-voice {
+      max-height: 9rem;
+      margin-top: .6rem;
+      opacity: 1;
+    }
+
+    .cast-card:hover .cast-dot { background: var(--game-cyan); box-shadow: 0 0 6px var(--game-cyan) }
+
+    .cast-code {
+      margin-bottom: .3rem;
+      font-family: var(--mono);
+      font-size: .55rem;
+      letter-spacing: .15em;
+      color: var(--game-cyan);
+      text-transform: uppercase;
+    }
+
+    .cast-role {
+      font-family: var(--mono);
+      color: var(--game-text-muted);
+      font-size: .7rem;
+      line-height: 1.4;
+    }
+    .cast-voice {
+      max-height: 0;
+      overflow: hidden;
+      font-family: var(--mono);
+      font-size: .62rem;
+      line-height: 1.6;
+      color: var(--game-text-dim);
+      opacity: 0;
+      transition: max-height .4s ease, opacity .4s ease, margin-top .3s ease;
+    }
+
+    .cast-dot {
+      width: 4px; height: 4px;
+      margin-top: .6rem;
+      border-radius: 50%;
+      background: var(--game-border);
+      transition: background .3s, box-shadow .3s;
+    }
+
+    .echo-status {
+      position: relative;
+      overflow: hidden;
+      margin-top: 1.2rem;
+      padding: 2rem;
+      border: 1px solid var(--game-border);
+      background: var(--game-surface);
+      text-align: center;
+    }
+
+    .echo-status::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 1px;
+      background: linear-gradient(to right, transparent, var(--game-cyan), transparent);
+    }
+
+    .echo-status-label {
+      margin-bottom: 1rem;
+      font-family: var(--mono);
+      font-size: .52rem;
+      letter-spacing: .28em;
+      color: var(--game-text-muted);
+      text-transform: uppercase;
+    }
+
+    .echo-status-text {
+      margin-bottom: 1.6rem;
+      font-family: var(--mono);
+      font-size: .82rem;
+      line-height: 2.1;
+      color: var(--game-text-dim);
+    }
+
+    .status-btns { display: flex; flex-wrap: wrap; justify-content: center; gap: 1rem; margin-bottom: 1.2rem; }
+
+    .echo-status-btn {
+      padding: .7rem 1.8rem;
+      font-family: var(--mono);
+      font-size: .6rem;
+      letter-spacing: .12em;
+      text-decoration: none;
+      text-transform: uppercase;
+      transition: all .3s;
+    }
+
+    .echo-status-btn-main { background: var(--game-cyan); color: var(--game-btn-text); }
+
+    .echo-status-btn-main:hover { background: var(--game-text) }
+
+    .echo-status-btn-alt { border: 1px solid var(--game-border); color: var(--game-cyan); }
+
+    .echo-status-btn-alt:hover { border-color: var(--game-cyan); background: var(--game-cyan-faint); }
+
+    .echo-signal-code {
+      font-family: var(--mono);
+      font-size: .5rem;
+      letter-spacing: .22em;
+      color: var(--game-text-muted);
+      text-transform: uppercase;
+      opacity: .35;
+    }
+
+    .menu-btn { display: none }
+
+    .mobile-menu {
+      position: fixed;
+      top: var(--nav-h); left: 0; right: 0;
+      z-index: 499;
+      max-height: 0;
+      overflow: hidden;
+      border-bottom: 1px solid var(--nav-border);
+      background: var(--nav-bg);
+      backdrop-filter: blur(16px);
+      transition: max-height .35s ease;
+    }
+
+    .mobile-menu.open { max-height: 360px }
+    .mobile-menu ul { list-style: none; }
+
+    .mobile-menu a {
+      display: block;
+      padding: 1rem 1.6rem;
+      border-top: 1px solid var(--border-faint);
+      font-family: 'Cinzel', serif;
+      font-size: .85rem;
+      letter-spacing: .15em;
+      color: var(--text-dim);
+      text-decoration: none;
+      text-transform: uppercase;
+    }
+
+    .mobile-menu a.active { color: var(--lavender) }
+
+    @media (min-width: 861px) {
+      .mobile-menu { display: none !important }
+    }
+    @media (max-width: 768px) {
+      :root { --nav-h: 54px }
+      .nav-logo-text { display: none }
+    }
+
+    /* phones: no sliding, everything stacks */
+    @media (max-width: 860px) {
+      .aura-display { padding: 1.4rem 1.2rem; }
+      .aura-number { font-size: 3.4rem }
+
+      body { overflow: auto; cursor: auto; }
+
+      .cursor,
+      .cursor-ring,
+      #hero canvas { display: none !important; }
+
+      .nav-links,
+      .arrow-nav,
+      .key-hint { display: none !important }
+
+      nav { padding: 0 1rem; }
+      .nav-logo-img { width: 30px; height: 30px; }
+
+      .nav-logo-text { font-size: .75rem }
+
+      .menu-btn {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 4px;
+        width: 34px; height: 34px;
+        border: 1px solid var(--border-faint);
+        background: transparent;
+      }
+
+      .menu-btn span {
+        display: block;
+        width: 17px;
+        height: 1px;
+        background: var(--text-dim);
+        transition: transform .25s ease, opacity .25s ease;
+      }
+      .menu-btn.open span:nth-child(1) { transform: translateY(5px) rotate(45deg) }
+      .menu-btn.open span:nth-child(2) { opacity: 0 }
+      .menu-btn.open span:nth-child(3) {
+        transform: translateY(-5px) rotate(-45deg);
+      }
+
+      .theme-toggle { width: 46px; height: 24px }
+
+      .theme-toggle::after { width: 18px; height: 18px; }
+
+      [data-theme="light"] .theme-toggle::after { transform: translateX(22px); }
+
+      .book-track {
+        position: static;
+        width: auto; height: auto;
+        padding-top: var(--nav-h);
+        overflow: visible;
+      }
+
+      .book-scroll {
+        transform: none !important;
+        display: block;
+        width: auto; height: auto;
+        transition: none !important;
+      }
+
+      .page { width: 100%; height: auto; overflow: visible; }
+      #hero {
+        min-height: calc(100dvh - var(--nav-h));
+        padding: 2rem 0;
+      }
+
+      .hero-content { max-width: 100%; padding: 1rem 1.4rem 0 }
+
+      .hero-name { font-size: clamp(2.1rem, 9vw, 3rem) }
+      .hero-tagline { padding: 0 .5rem; font-size: 1rem; }
+      .hero-cta {
+        flex-direction: column;
+        gap: 1rem;
+        width: 100%;
+        max-width: 280px;
+        margin: 0 auto 1.2rem;
+      }
+
+      .btn-primary { width: 100%; text-align: center; }
+
+      .hero-copyright { position: static; margin-top: 2rem }
+      .section-page { min-height: auto; padding: 3.5rem 1.4rem; }
+
+      .section-page .watermark { display: none }
+      .inner { max-width: 100% }
+      .me-layout {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+        text-align: center;
+      }
+
+      .me-logo-col { margin: 0 auto }
+
+      .me-logo-img { width: 130px; height: 130px; }
+      .game-header {
+        grid-template-columns: 1fr;
+        gap: 1.2rem;
+        text-align: center;
+      }
+      .game-logo { padding-top: 0 }
+
+      .game-logo-img { width: 96px; height: 96px }
+
+      .cast-grid { grid-template-columns: 1fr; gap: .5rem; }
+
+      .cast-card {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: .8rem;
+        padding: .85rem .9rem;
+      }
+
+      .cast-voice { display: none }
+      .cast-role { text-align: right; }
+
+      .status-btns { flex-direction: column }
+
+      .echo-status-btn { width: 100%; text-align: center; }
+
+      .poem-card-inner { grid-template-columns: 2rem 1fr }
+
+      .poem-toggle-icon { grid-column: 1 / -1; padding-top: .6rem; }
+
+      /* TODO fix poem spacing on mobile */
+      .poem-full { padding: 1.3rem 1rem }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="cursor" id="cursor"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
+
+  <nav>
+    <a href="#" class="nav-logo" data-section="hero">
+      <img src="logo.png" alt="EPK logo" class="nav-logo-img">
+      <span class="nav-logo-text">EPK</span>
+    </a>
+
+    <ul class="nav-links">
+      <li><a href="#" data-section="hero"><span class="nav-label">Home</span></a></li>
+      <li><a href="#" data-section="me"><span class="nav-label">Me</span></a></li>
+      <li><a href="#" data-section="game"><span class="nav-label">Typing...</span></a></li>
+      <li><a href="#" data-section="fadowitch"><span class="nav-label">Fado Witch</span></a></li>
+      <li><a href="#" data-section="poetry"><span class="nav-label">Poetry</span></a></li>
+    </ul>
+
+    <div class="nav-right">
+      <button class="theme-toggle" id="themeToggle" aria-label="Toggle light/dark mode">
+        <span class="icon-dark">&#9789;</span>
+        <span class="icon-light">&#9728;</span>
+      </button>
+      <button class="menu-btn" id="menuBtn" aria-label="Open menu"><span></span><span></span><span></span></button>
+    </div>
+  </nav>
+
+  <div class="mobile-menu" id="mobileMenu">
+    <ul>
+      <li><a href="#" data-section="hero">Home</a></li>
+      <li><a href="#" data-section="me">Me</a></li>
+      <li><a href="#" data-section="game">Typing...</a></li>
+      <li><a href="#" data-section="fadowitch">Fado Witch</a></li>
+      <li><a href="#" data-section="poetry">Poetry</a></li>
+    </ul>
+  </div>
+
+  <button class="arrow-nav arrow-prev" id="arrowPrev" aria-label="Previous page">&#8592;</button>
+  <button class="arrow-nav arrow-next" id="arrowNext" aria-label="Next page">&#8594;</button>
+
+  <div class="key-hint" id="keyHint">scroll or use &#8592; &#8594; to turn pages</div>
+
+  <div class="book-track">
+    <div class="book-scroll" id="bookScroll">
+
+      <div class="page" id="page-0">
+        <section id="hero">
+          <canvas id="spores"></canvas>
+
+          <div class="hero-content">
+            <h1 class="hero-name">
+              ELPERRO<br>KAMIKAZEE
+              <span>Game Developer &middot; Writer</span>
+            </h1>
+            <p class="hero-tagline">
+              You can become someone else as much as you can't,<br>
+              because who the hell were you in the first place?
+            </p>
+            <div class="hero-cta">
+              <a href="#" class="btn-primary" data-section="game">See the work</a>
+              <a href="https://www.patreon.com/cw/ElPerroKamikazee" class="btn-secondary" target="_blank" rel="noopener">Patreon &rarr;</a>
+              <a href="https://ko-fi.com/elperrokamikazee" class="btn-secondary" target="_blank" rel="noopener">Ko-fi &rarr;</a>
+            </div>
+            <p class="hero-support-note">Patreon for exclusive work &amp; tiers &middot; Ko-fi for one-time support</p>
+          </div>
+
+          <p class="hero-copyright">&copy; 2026 ElPerroKamikazee</p>
+        </section>
+      </div>
+
+      <div class="page" id="page-1">
+        <div class="section-page" id="me">
+          <div class="page-top-line"></div>
+          <span class="watermark">01 -- ME</span>
+          <div class="inner" style="max-width: 1000px;">
+            <span class="label reveal">who i am</span>
+            <h2 class="section-title reveal">Me</h2>
+            <div class="divider reveal"></div>
+            <div class="me-layout">
+              <div class="me-logo-col reveal">
+                <img src="logo.png" alt="ElPerroKamikazee" class="me-logo-img">
+              </div>
+              <div class="me-text-col">
+                <div class="me-line reveal">I make things. Mostly I make problems.</div>
+                <div class="me-line reveal">I think so much that I forget to live.</div>
+                <div class="me-line reveal">I trust people who stop to look at moss.</div>
+                <div class="me-line reveal">It feels like I am always close to a breakthrough -- close to figuring out reality, meaning, life -- but I never climax.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- game page, cast cards show their line on hover -->
+      <div class="page" id="page-2">
+        <div class="section-page" id="game">
+          <div class="page-top-line"></div>
+          <span class="watermark">02 -- TYPING...</span>
+          <div class="inner">
+            <div class="game-header">
+              <div class="game-header-left">
+                <span class="label reveal">in development</span>
+                <h2 class="section-title reveal">Typing...</h2>
+                <div class="divider reveal"></div>
+              </div>
+              <div class="game-logo reveal">
+                <img src="typing.png" alt="Typing... logo" class="game-logo-img">
+              </div>
+            </div>
+
+            <div class="game-tags reveal">
+              <span class="tag">Chat Fiction</span>
+              <span class="tag">Mobile</span>
+              <span class="tag">Choice-Driven</span>
+              <span class="tag">Dystopia</span>
+              <span class="tag">In Development</span>
+            </div>
+
+            <p class="game-desc reveal">
+              Imagine a world devoid of friction. Devoid of mistakes.<br>
+              You are born categorised. Born catalogued. The system knows your job; it knows your partner, your life before you do.<br>
+              Everything you are comes back as a number.<br>
+              The number decides what you can access, what you deserve. Who you are.
+            </p>
+
+            <div class="aura-display reveal">
+              <div class="aura-live"></div>
+              <div class="aura-label">Aura Index  Citizen Profile</div>
+              <div class="aura-number">71.3</div>
+              <div class="aura-sub">Monitoring Advisory in effect</div>
+            </div>
+
+            <p class="game-desc reveal">
+              Then something happens -- something that wasn't supposed to -- inside the usual routine. A signal.
+            </p>
+
+            <p class="game-desc reveal">
+              Typing... is a mobile chat game. You join a group of misfits, with different politics and different wounds. You choose what to say. You choose who to trust. You help them with their mission -- or don't -- forge real relationships, and slowly uncover what the system is actually doing to people.
+            </p>
+
+            <p class="game-desc reveal">Will you make the world a better place?</p>
+            <p class="game-desc game-highlight reveal">Is that even possible?</p>
+
+            <div class="game-bottom reveal">
+              <span class="bottom-label">the channel -- hover to read</span>
+              <div class="cast-grid">
+                <div class="cast-card">
+                  <div class="cast-code">Stavka</div>
+                  <div class="cast-role">Cell leader</div>
+                  <div class="cast-voice">"Don't tell frightened people not to worry."</div>
+                  <div class="cast-dot"></div>
+                </div>
+                <div class="cast-card">
+                  <div class="cast-code">Comma</div>
+                  <div class="cast-role">Archivist</div>
+                  <div class="cast-voice">"i always get the before and the after, nobody sends me the middle"</div>
+                  <div class="cast-dot"></div>
+                </div>
+                <div class="cast-card">
+                  <div class="cast-code">Footnote</div>
+                  <div class="cast-role">Disinformation</div>
+                  <div class="cast-voice">"the archive contains feelings organised to look like data, which is a different thing entirely"</div>
+                  <div class="cast-dot"></div>
+                </div>
+                <div class="cast-card">
+                  <div class="cast-code">Open</div>
+                  <div class="cast-role">Human intel</div>
+                  <div class="cast-voice">"Take your time. Nobody here is scoring it."</div>
+                  <div class="cast-dot"></div>
+                </div>
+                <div class="cast-card">
+                  <div class="cast-code">Good Faith</div>
+                  <div class="cast-role">Document forger</div>
+                  <div class="cast-voice">"Most of us chose nothing for years."</div>
+                  <div class="cast-dot"></div>
+                </div>
+                <div class="cast-card">
+                  <div class="cast-code">Null</div>
+                  <div class="cast-role">Counter-surveillance</div>
+                  <div class="cast-voice">"Say something or don't. I log nothing either way."</div>
+                  <div class="cast-dot"></div>
+                </div>
+                <div class="cast-card">
+                  <div class="cast-code">Ridge</div>
+                  <div class="cast-role">Extraction routes</div>
+                  <div class="cast-voice">"Whoever built that network before me knew what they were doing."</div>
+                  <div class="cast-dot"></div>
+                </div>
+                <div class="cast-card">
+                  <div class="cast-code">Stray</div>
+                  <div class="cast-role">Field operative</div>
+                  <div class="cast-voice">"Good timing."</div>
+                  <div class="cast-dot"></div>
+                </div>
+              </div>
+
+              <div class="echo-status">
+                <div class="echo-status-label">Transmission Status</div>
+                <div class="echo-status-text">
+                  Episode 1 is in development.<br>
+                  The signal is almost ready.
+                </div>
+                <div class="status-btns">
+                  <a href="https://www.patreon.com/cw/ElPerroKamikazee" class="echo-status-btn echo-status-btn-main" target="_blank" rel="noopener">Follow on Patreon</a>
+                  <a href="https://ko-fi.com/elperrokamikazee" class="echo-status-btn echo-status-btn-alt" target="_blank" rel="noopener">Ko-fi</a>
+                </div>
+                <div class="echo-signal-code">ECHO://4C.SIGNAL.7734</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- TODO: placeholder, fado witch page goes here -->
+      <div class="page" id="page-3">
+        <div class="section-page" id="fadowitch">
+          <span class="watermark">03 -- FADO WITCH</span>
+          <div class="inner">
+            <span class="label reveal">in development</span>
+            <h2 class="section-title reveal">Fado Witch</h2>
+            <div class="divider reveal"></div>
+            <p class="poetry-intro reveal">Coming soon.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="page" id="page-4">
+        <div class="section-page" id="poetry">
+          <span class="watermark">04 -- POETRY</span>
+          <div class="inner">
+            <span class="label reveal">writing</span>
+            <h2 class="section-title reveal">Poetry</h2>
+            <div class="divider reveal"></div>
+            <p class="poetry-intro reveal">
+              I write poems when I am feeling intense emotions. Most of them come from rage, or despair.
+            </p>
+            <div class="poems-list reveal">
+              <div class="poem-card">
+                <div class="poem-card-inner">
+                  <div class="poem-num">01</div>
+                  <div class="poem-meta">
+                    <div class="poem-title">The Price of a Chair</div>
+                    <div class="poem-excerpt">"Ten lives or this?" a simple test. The chair, of course it's Louis' best...</div>
+                  </div>
+                  <div class="poem-toggle-icon">read &rarr;</div>
+                </div>
+                <div class="poem-full">"Ten lives or this?" a simple test.
+The chair, of course it's Louis' best.
+It doesn't rock. It doesn't care.
+And every day someone picks the chair.
+
+They say, "I've earned it. I was smart."
+(As if the world's a merit chart.)
+They built their thrones from spines and sweat.
+Call it fair. And don't regret.
+
+One child dies, but stocks arise.
+A win. A yacht. A suit that lies.
+"It's not my fault," the wealthy plead.
+(They sleep just fine. The dead don't need.)
+
+They sip champagne from crying eyes.
+They dine where famine never dies.
+And every fork they lift insists,
+"Deserving hands wear diamond wrists."
+
+You ask for crumbs? Why not aspire?
+They toast success while towns catch fire.
+Their gold is clean washed in denial.
+And corpses? Just a market file.
+
+The poor should rise, they love to say.
+In boots worn through, and thick with clay.
+If dreams decay in sallow skin,
+It's proof of weakness. Proof of sin.
+
+What's fairness but a child's scream?
+They bought the world. Hope's just a dream.
+The poor should strive, they like to say.
+(Just not too near. And not their way.)
+
+A girl
+in cobalt mines
+has no name--
+but makes your phone
+bright.
+
+Children fold
+in factory light,
+lungs grinding glass,
+to bind your name and mine.
+
+There are hands
+at the end of every
+"Made In"
+tag.
+Blood.
+
+So take your seat. The room is still.
+The air is sweet. Your glass -- refill.
+Ignore the names beneath your thighs,
+they're buried deep. And silence buys.
+</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+    const root = document.documentElement;
+    const pageIds = ['hero', 'me', 'game', 'fadowitch', 'poetry'];
+    const pageCount = pageIds.length;
+    const ticksToTurn = 4; // wheel ticks needed to turn a page, lower = twitchier
+
+    // dom refs
+    const cursor = document.getElementById('cursor');
+    const ring = document.getElementById('cursorRing');
+    const book = document.getElementById('bookScroll');
+    const prevBtn = document.getElementById('arrowPrev'), nextBtn = document.getElementById('arrowNext');
+    const hint = document.getElementById('keyHint');
+    const menuBtn = document.getElementById('menuBtn');
+    const menu = document.getElementById('mobileMenu');
+    const themeBtn = document.getElementById('themeToggle');
+    const canvas = document.getElementById('spores');
+    const ctx = canvas.getContext('2d');
+
+    let currentPage = 0, isAnimating = false, wheelCooldown = false;
+    const wheelTicks = { down: 0, up: 0 };
+
+    function isMobile() { return window.matchMedia('(max-width: 860px)').matches; }
+    function isLight() { return root.getAttribute('data-theme') == 'light'; }
+
+    // -999 = mouse nowhere near
+    const mouse = { x: -999, y: -999 };
+
+    window.addEventListener('mousemove', e => {
+      const x = e.clientX + 'px', y = e.clientY + 'px';
+      cursor.style.left = x;
+      cursor.style.top = y;
+      ring.animate({ left: x, top: y }, { duration: 180, fill: 'forwards' });
+
+      const r = canvas.getBoundingClientRect();
+      mouse.x = e.clientX - r.left;
+      mouse.y = e.clientY - r.top;
+    });
+
+    document.addEventListener('mouseleave', () => { mouse.x = mouse.y = -999; });
+
+    document.addEventListener('mouseover', e => {
+      ring.classList.toggle('hovering', !!e.target.closest('a, button, .poem-card, .tag'));
+    });
+
+    function resizeCanvas() { canvas.width = innerWidth; canvas.height = innerHeight; }
+
+    const shoveRadius = 120;
+
+    const sporeColors = {
+      dark:  [[196,168,224], [110,63,160], [157,108,201]],
+      light: [[110,63,160], [74,31,120], [139,82,184]]
+    };
+
+    function newSpore() {
+      const light = isLight();
+      const pal = sporeColors[light ? 'light' : 'dark'];
+      return {
+        x: Math.random() * canvas.width,
+        y: canvas.height + Math.random() * 60,
+        r: Math.random() * 1.3 + .2,
+        vx: (Math.random() - .5) * .12,
+        vy: Math.random() * .32 + .07,
+        phase: Math.random() * Math.PI * 2,
+        sway: Math.random() * .007 + .003,
+        alpha: light ? Math.random() * .35 + .15 : Math.random() * .25 + .05,
+        color: pal[Math.floor(Math.random() * pal.length)],
+        ox: 0, oy: 0 // mouse shove offset
+      };
+    }
+
+    const spores = Array.from({ length: 60 }, () => {
+      const s = newSpore();
+      s.y = Math.random() * canvas.height;
+      return s;
+    });
+
+    function drawSpores() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      const light = isLight();
+
+      for (let i = 0; i < spores.length; i++) {
+        let s = spores[i];
+
+        s.phase += s.sway;
+        s.x += s.vx + Math.sin(s.phase) * .22;
+        s.y -= s.vy;
+
+        if (s.y < -10) { s = spores[i] = newSpore(); }
+
+        const dx = s.x + s.ox - mouse.x, dy = s.y + s.oy - mouse.y;
+        const dist = Math.hypot(dx, dy);
+        if (dist < shoveRadius && dist > 1) {
+          const push = (shoveRadius - dist) * .05;
+          s.ox += dx / dist * push;
+          s.oy += dy / dist * push;
+        }
+
+        s.ox *= .96;
+        s.oy *= .96;
+
+        const a = light ? Math.min(s.alpha * 1.8, .55) : s.alpha;
+        const [r, g, b] = s.color;
+        ctx.beginPath();
+        ctx.arc(s.x + s.ox, s.y + s.oy, s.r, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(${r}, ${g}, ${b}, ${a})`;
+        ctx.fill();
+      }
+
+      requestAnimationFrame(drawSpores);
+    }
+
+    resizeCanvas();
+    drawSpores(); // starts the loop
+
+    function closeMobileMenu() {
+      menuBtn.classList.remove('open');
+      menu.classList.remove('open');
+    }
+
+    function revealPage(index) {
+      const page = document.getElementById('page-' + index);
+      if (!page) return;
+
+      page.querySelectorAll('.reveal:not(.visible)').forEach((el, i) => setTimeout(() => el.classList.add('visible'), 100 + i * 80));
+    }
+
+    function goToPage(index, animate = true) {
+      currentPage = Math.max(0, Math.min(pageCount - 1, index));
+      // console.log('page', currentPage);
+
+      book.style.transition = animate ? '' : 'none';
+      book.style.transform = 'translateX(-' + currentPage * window.innerWidth + 'px)';
+
+      if (animate) {
+        isAnimating = true;
+        setTimeout(() => isAnimating = false, 800);
+      }
+
+      prevBtn.classList.toggle('visible', currentPage > 0);
+      nextBtn.classList.toggle('visible', currentPage < pageCount - 1);
+
+      document.querySelectorAll('.nav-links a[data-section]').forEach(a => {
+        a.classList.toggle('active', a.dataset.section == pageIds[currentPage]);
+      });
+
+      revealPage(currentPage);
+      if (currentPage > 0) hint.classList.add('hidden');
+    }
+
+    function goToSection(id) {
+      if (isMobile()) {
+        if (id === 'hero') {
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        } else {
+          const el = document.getElementById(id);
+          if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+
+        document.querySelectorAll('.mobile-menu a[data-section]').forEach(a => a.classList.toggle('active', a.dataset.section == id));
+        closeMobileMenu();
+        return;
+      }
+
+      goToPage(pageIds.indexOf(id));
+    }
+
+	function nextPage() { if (!isAnimating) goToPage(currentPage + 1); }
+    function prevPage() {
+      if (!isAnimating) goToPage(currentPage - 1)
+    }
+
+    document.querySelectorAll('[data-section]').forEach(link => {
+      link.addEventListener('click', e => {
+        e.preventDefault();
+        goToSection(link.dataset.section);
+      });
+    });
+
+    nextBtn.addEventListener('click', nextPage);
+    prevBtn.addEventListener('click', prevPage);
+
+    menuBtn.addEventListener('click', () => {
+      menuBtn.classList.toggle('open');
+      menu.classList.toggle('open');
+    });
+
+    // maybe debounce this
+    window.addEventListener('resize', () => {
+      resizeCanvas();
+      if (!isMobile()) goToPage(currentPage, false);
+    });
+
+    window.addEventListener('wheel', e => {
+      if (isMobile()) return;
+
+      const page = document.getElementById('page-' + currentPage);
+      if (!page) return;
+
+      // only turn the page once you're at the edge, else long pages flip by accident
+      const down = e.deltaY > 0;
+      const atBottom = page.scrollHeight - page.scrollTop - page.clientHeight < 5;
+      const atTop = page.scrollTop < 5;
+
+      if (down && !atBottom) { wheelTicks.down = 0; return; }
+      if (!down && !atTop) { wheelTicks.up = 0; return; }
+
+      e.preventDefault();
+      if (wheelCooldown || isAnimating) return;
+
+      const dir = down ? 'down' : 'up';
+      wheelTicks[down ? 'up' : 'down'] = 0;
+
+      if (++wheelTicks[dir] < ticksToTurn) return;
+
+      wheelTicks[dir] = 0;
+      wheelCooldown = true;
+      setTimeout(() => wheelCooldown = false, 900);
+      down ? nextPage() : prevPage();
+    }, { passive: false });
+
+    window.addEventListener('keydown', e => {
+      if (isMobile()) return;
+
+      if (e.key == 'ArrowRight') { e.preventDefault(); nextPage(); }
+      else if (e.key == 'ArrowLeft') { e.preventDefault(); prevPage(); }
+    });
+
+    let touchStartX = 0, touchStartY = 0;
+
+    window.addEventListener('touchstart', e => {
+      if (isMobile()) return;
+      touchStartX = e.touches[0].clientX;
+      touchStartY = e.touches[0].clientY;
+    }, { passive: true });
+
+    window.addEventListener('touchend', e => {
+      if (isMobile()) return;
+
+      const dx = e.changedTouches[0].clientX - touchStartX;
+      const dy = e.changedTouches[0].clientY - touchStartY;
+
+      if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 50) dx < 0 ? nextPage() : prevPage();
+    }, { passive: true });
+
+    const revObserver = new IntersectionObserver(entries => {
+      entries.forEach(en => { if (en.isIntersecting) en.target.classList.add('visible'); });
+    }, { threshold: .1 });
+
+    document.querySelectorAll('.reveal').forEach(el => revObserver.observe(el));
+
+    const secObserver = new IntersectionObserver(entries => {
+      entries.forEach(en => {
+        if (!en.isIntersecting) return;
+
+        document.querySelectorAll('.mobile-menu a[data-section]').forEach(a => {
+          a.classList.toggle('active', a.dataset.section == en.target.id);
+        });
+      });
+    }, { rootMargin: '-45% 0px -45% 0px' });
+
+    pageIds.map(id => document.getElementById(id)).filter(Boolean).forEach(sec => secObserver.observe(sec));
+
+    // private mode can throw here
+    try {
+      const saved = localStorage.getItem('epk-theme');
+      if (saved) root.setAttribute('data-theme', saved);
+    } catch (err) {}
+
+    themeBtn.addEventListener('click', () => {
+      const next = isLight() ? 'dark' : 'light';
+      root.setAttribute('data-theme', next);
+
+      try { localStorage.setItem('epk-theme', next); } catch (err) {}
+    });
+
+    document.querySelectorAll('.poem-card').forEach(card => {
+      card.addEventListener('click', () => {
+        const wasOpen = card.classList.contains('open');
+
+        document.querySelectorAll('.poem-card.open').forEach(c => {
+          c.classList.remove('open');
+          c.querySelector('.poem-toggle-icon').textContent = 'read \u2192';
+        });
+
+        if (wasOpen) return;
+
+        card.classList.add('open');
+        card.querySelector('.poem-toggle-icon').textContent = 'close \u2190';
+      });
+    });
+
+    nextBtn.classList.add('visible');
+    revealPage(0);
+  </script>
+</body>
+</html>
